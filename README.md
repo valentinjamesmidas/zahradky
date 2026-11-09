@@ -29,7 +29,7 @@ blender --background --python scripts/generate_assets.py
 blender --background --python scripts/render_preview.py
 ```
 
-Pipeline je deterministická. Exportuje 14 GLB souborů s PBR materiály do `public/models/`: parcelu, dvě varianty sadu, čtyři Tiny Housy, jednotlivé doplňky, samostatnou solární a vodní technologii a společný model doplňků. Výchozí souřadnice jsou v metrech; Y směřuje vzhůru. Model domu je umístěn samostatně, ostatní kolekce sdílejí souřadnice parcely. GLB soubory jsou součástí repozitáře; Blender není nutný k běžnému sestavení.
+Pipeline je deterministická. Exportuje 15 GLB souborů s PBR materiály do `public/models/`: parcelu, dvě varianty sadu, čtyři Tiny Housy, hybridní domek NOVA, jednotlivé doplňky, samostatnou solární a vodní technologii a společný model doplňků. Výchozí souřadnice jsou v metrech; Y směřuje vzhůru. Model domu je umístěn samostatně, ostatní kolekce sdílejí souřadnice parcely. GLB soubory jsou součástí repozitáře; Blender není nutný k běžnému sestavení.
 
 Každý GLB má vlastní hranici chyby a procedurální náhradu. Při chybě GLB se zachovává ovladatelná scéna. Při nedostupnosti WebGL aplikace zobrazí lokální render a zachová výběry i cenový výpočet. Prostředí a osvětlení se generují lokálně, bez externího HDRI. Všechny fonty a modely jsou hostovány společně s aplikací.
 
@@ -71,3 +71,16 @@ Pro vlastní doménu nejprve přidejte doménu v Pages → Custom domains. Apex 
 Masterplan, stav parcel i architektonické modely jsou ilustrativní a takto označené. Ceny vycházejí ze zadání a nejsou ověřenou nabídkou výrobců. Homologaci, dodavatele, využití pozemku, územní plán, vodní zdroj a pravidla umístění každého mobilního domu je nutné ověřit jednotlivě. SPZ sama o sobě nepovoluje umístění. Nahraďte ukázkovou dostupnost skutečnou evidencí a doplňte právní identitu provozovatele a kompletní informační povinnost ke zpracování údajů před skutečným prodejem.
 
 Font Manrope je dostupný pod SIL Open Font License, viz `public/fonts/OFL.txt`.
+
+## Hybridní dům NOVA — TŘY D
+
+Pátá varianta domu vychází z podkladů https://tryd.cz/hybridni-dum-nova/ ověřených 9. 11. 2026. Půdorys základní varianty je 4 × 3 m; výšky, zapuštění průčelí a členění otvorů jsou odhadnuté z ilustrací výrobce. Jde o zahradní stavbu bez přívěsu a SPZ. Model má sedlovou střechu se stojatými drážkami, tři antracitové stěny, čelo z Thermowoodu, dřevěné zápraží, čtyřdílné průhledné prosklení a otevřený interiér. Dřevo má zabalenou rastrovou texturu, materiály používají Principled BSDF. Nejde o prováděcí dokumentaci.
+
+```sh
+blender --background --python scripts/generate_nova.py
+blender --background --python scripts/generate_nova.py -- --render
+```
+
+Výstupy: `public/models/house_nova.glb` pro web a `public/models/nova.blend` pro další úpravy. Volitelný render vzniká v `work/nova/nova-preview.png`; web používá připravený `public/images/nova-preview.webp`. Kompletní `npm run assets` spouští i tuto pipeline. Ostatní domy zůstávají beze změn. NOVA má vlastní procedurální náhradu pro případ chyby GLB a vlastní statický náhled bez WebGL. Při výběru solární technologie se pro tento sedlový domek zobrazuje samostatný pozemní panelový rám.
+
+Katalogový základ stránky je 310 990 Kč. Zdrojový formulář počítá DPH samostatně. Orientační kalkulace konfigurátoru připočítává 21 % a zaokrouhluje na 376 298 Kč. Doprava, montáž, založení a další dodavatelské příplatky nejsou zahrnuté. Tento základ a vyloučené položky se zobrazují u výběru i v rekapitulaci poptávky. Nejde o závaznou nabídku ani potvrzenou spolupráci s výrobcem.

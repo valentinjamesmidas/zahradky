@@ -5,3 +5,5 @@ work/
 .env*
 *.blend*
 .DS_Store
+
+!public/models/nova.blend

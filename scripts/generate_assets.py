@@ -176,3 +176,7 @@ export('orchard_standard',lambda:orchard(False)); export('orchard_trees',lambda:
 for kind in ['liberte','millhome','baluchon','anna']: export('tiny_'+kind,lambda k=kind:house(k))
 for name,fn in [('terrace',terrace),('corten_beds',beds),('firepit_pergola',pergola),('offgrid_tech',tech),('addons',all_addons)]: export(name,fn)
 print('All assets generated in',OUT)
+
+# NOVA is a garden building with its own reference-based pipeline.
+import runpy
+runpy.run_path(os.path.join(ROOT,'scripts','generate_nova.py'),run_name='__main__')

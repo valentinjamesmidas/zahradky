@@ -15,7 +15,8 @@ export const houses=[
  {id:'liberte',name:'Liberté Tiny Shell',country:'Nizozemsko',area:20,price:790000,description:'Svislý modřínový obklad, francouzská dvoukřídlá okna a podvozek Vlemmix s SPZ.'},
  {id:'millhome',name:'Mill Home Nordic',country:'Nizozemsko',area:25,price:1190000,description:'Asymetrická střecha, rohové prosklení, spací loft, koupelna a kuchyně.'},
  {id:'baluchon',name:'Baluchon Cedar Edition',country:'Francie',area:24,price:1390000,description:'Červený cedr, antracitový falcovaný plech a krbová kamna.'},
- {id:'anna',name:'Cabin ANNA Glamping',country:'Nizozemsko',area:28,price:1690000,description:'Posuvné prosklené stěny, biofilní dřevěná žebra a kontakt s přírodou.'}
+ {id:'anna',name:'Cabin ANNA Glamping',country:'Nizozemsko',area:28,price:1690000,description:'Posuvné prosklené stěny, biofilní dřevěná žebra a kontakt s přírodou.'},
+ {id:'nova',name:'Hybridní dům NOVA',country:'Česko · TŘY D',area:12,price:376298,model:'house_nova',type:'garden',dimensions:'4 × 3 m',source:'https://tryd.cz/hybridni-dum-nova/',sourcePrice:310990,vat:21,preview:'/images/nova-preview.webp',description:'Zateplený zahradní domek s půdorysem 4 × 3 m, sedlovou střechou, antracitovým opláštěním Classic click a zapuštěným čelem z Thermowoodu. Čtyřdílné prosklení v antracitových rámech. Bez podvozku a SPZ.',pricingNote:'Orientační základ 310 990 Kč + 21 % DPH = 376 298 Kč. Doprava, montáž, založení a další výbava se naceňují zvlášť. Ověřeno u výrobce 9. 11. 2026.'}
 ];
 export const gardenOptions=[
  {id:'orchardXXL',name:'Vzrostlý ovocný sad XXL',detail:'8 vzrostlých stromů + jedlé keře',price:45000,icon:'trees'},
