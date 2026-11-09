@@ -1,0 +1,9 @@
+name = "zahradky-web"
+compatibility_date = "2026-11-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "zahradky-leads"
+database_id = "3a87506d-e2fc-4d2e-ae3d-3149e4fde1e7"
+migrations_dir = "migrations"

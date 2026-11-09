@@ -1,0 +1,4 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile,readdir} from 'node:fs/promises';
+test('All 14 exported GLBs are valid, self-contained glTF 2.0 assets',async()=>{const names=(await readdir('public/models')).filter(n=>n.endsWith('.glb'));assert.equal(names.length,14);for(const name of names){const bytes=await readFile(`public/models/${name}`);assert.equal(bytes.toString('ascii',0,4),'glTF',name);assert.equal(bytes.readUInt32LE(4),2,name);assert.equal(bytes.readUInt32LE(8),bytes.length,name);assert.equal(bytes.readUInt32LE(16),0x4e4f534a,name);const gltf=JSON.parse(bytes.toString('utf8',20,20+bytes.readUInt32LE(12)));assert.ok(gltf.meshes.length>0,name);assert.ok(gltf.nodes.length>0,name);assert.ok(gltf.buffers.every(b=>!b.uri),name);assert.ok(gltf.materials.length>0,name)}});

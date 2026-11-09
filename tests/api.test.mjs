@@ -1,0 +1,14 @@
+import {test,after,before} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
+import {defaultConfig,calculate} from '../src/catalog.js';
+let mf,db;
+before(async()=>{mf=new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:'dist/_worker.js',compatibilityDate:'2026-11-01',d1Databases:['DB']}));db=await mf.getD1Database('DB');const sql=await readFile('migrations/0001_leads.sql','utf8');for(const statement of sql.split(';').map(s=>s.trim()).filter(Boolean))await db.prepare(statement).run()});
+after(async()=>{await mf?.dispose()});
+const payload=(override={})=>({name:'Testovací zájemce',email:'test@example.com',phone:'+420 777 123 456',note:'Automatický lokální test.',consent:true,reserve:true,requestId:crypto.randomUUID(),config:{...defaultConfig},...override});
+const send=(body,extra={})=>mf.dispatchFetch('https://zahradka.test/api/leads',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://zahradka.test','CF-Connecting-IP':'192.0.2.10',...extra},body:JSON.stringify(body)});
+test('Successful inquiry persists a server-calculated quote; retries create one record',async()=>{const body=payload();body.config.total=1;let response=await send(body);assert.equal(response.status,201);const result=await response.json();assert.match(result.code,/^CZ-KLD-14-[0-9A-F]{8}$/);let row=await db.prepare('SELECT * FROM leads WHERE request_id=?').bind(body.requestId).first();assert.equal(row.total,calculate(defaultConfig).total);assert.equal(row.reservation_requested,1);response=await send(body);assert.equal(response.status,200);assert.equal((await response.json()).code,result.code);assert.equal((await db.prepare('SELECT COUNT(*) n FROM leads WHERE request_id=?').bind(body.requestId).first()).n,1)});
+test('Rejects cross-origin submissions, missing consent and unavailable plots',async()=>{assert.equal((await send(payload(),{Origin:'https://hostile.test'})).status,403);assert.equal((await send(payload({consent:false}))).status,400);assert.equal((await send(payload({config:{...defaultConfig,plot:3}}))).status,400);assert.equal((await send(payload({website:'spam'}))).status,400)});
+test('Rejects oversized and malformed JSON without touching storage',async()=>{assert.equal((await send(payload({note:'a'.repeat(11000)}))).status,413);const r=await mf.dispatchFetch('https://zahradka.test/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:'{bad'});assert.equal(r.status,400);assert.equal((await mf.dispatchFetch('https://zahradka.test/api/leads')).status,405)});
+test('Rate limit blocks more than six submissions per hour',async()=>{for(let i=0;i<6;i++)assert.equal((await send(payload(),{'CF-Connecting-IP':'192.0.2.22'})).status,201);assert.equal((await send(payload(),{'CF-Connecting-IP':'192.0.2.22'})).status,429)});

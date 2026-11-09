@@ -1,0 +1,73 @@
+# CHCI ZAHRÁDKU.cz
+
+Český konfigurátor soukromého sadu o rozloze 300 m² s Tiny Housem a přímým financováním. React 19, Vite, Tailwind 4, Three.js, React Three Fiber a Drei. Hosting: Cloudflare Pages, poptávky: Cloudflare D1 v EU.
+
+## Spuštění
+
+Node.js 24+, npm, pro regeneraci modelů Blender 4.3+.
+
+```sh
+npm ci
+npm run dev
+npm run build
+npm test
+```
+
+Vite obsluhuje frontend. Poptávkové API vyžaduje Pages runtime. Pro lokální běh celé aplikace po sestavení:
+
+```sh
+npx wrangler d1 migrations apply zahradky-leads --local
+npx wrangler pages dev dist
+```
+
+Lokální D1 je oddělená od produkce. Testy běží v izolovaném Miniflare/SQLite runtime a nevkládají data do produkční databáze.
+
+## 3D pipeline
+
+```sh
+blender --background --python scripts/generate_assets.py
+blender --background --python scripts/render_preview.py
+```
+
+Pipeline je deterministická. Exportuje 14 GLB souborů s PBR materiály do `public/models/`: parcelu, dvě varianty sadu, čtyři Tiny Housy, jednotlivé doplňky, samostatnou solární a vodní technologii a společný model doplňků. Výchozí souřadnice jsou v metrech; Y směřuje vzhůru. Model domu je umístěn samostatně, ostatní kolekce sdílejí souřadnice parcely. GLB soubory jsou součástí repozitáře; Blender není nutný k běžnému sestavení.
+
+Každý GLB má vlastní hranici chyby a procedurální náhradu. Při chybě GLB se zachovává ovladatelná scéna. Při nedostupnosti WebGL aplikace zobrazí lokální render a zachová výběry i cenový výpočet. Prostředí a osvětlení se generují lokálně, bez externího HDRI. Všechny fonty a modely jsou hostovány společně s aplikací.
+
+`work/garden-preview.png` z renderu lze převést do `public/images/garden-preview.webp` pomocí libovolného WebP encoderu. Dodaný WebP je již připraven.
+
+## Konfigurace a ceny
+
+`src/catalog.js` obsahuje všech 10 zadaných lokalit, domy, doplňky a společnou kalkulaci pro klienta i server. Financování používá přesný anuitní vzorec se sazbou 0,079 / 12, akontací 15–70 % a splatností 36–120 měsíců. Výpočet pracuje s nezaokrouhlenou splátkou; zobrazení je zaokrouhlené na celé Kč. U platby v hotovosti je úrok i splátka nulová.
+
+Návrh se ukládá do localStorage. Tlačítko Sdílet návrh kopíruje odkaz s kompletní konfigurací v parametru `navrh`; neobsahuje kontaktní údaje. V poptávce lze návrh stáhnout jako JSON.
+
+## Poptávky a data
+
+`POST /api/leads` validuje kontakt, souhlas, dostupnost ukázkové parcely i celou konfiguraci. Cena se vždy vypočítá na serveru. Kontakt není veřejně čitelný. Databáze má unikátní idempotentní klíč, ochranu proti opakovanému vložení a omezení na šest nových poptávek z jedné adresy za hodinu. Identifikátor pro omezení je jednosměrný hash adresy a hodinového okna; IP se do poptávek neukládá. Požadavky z cizích originů a těla přes 10 kB se odmítají. Starší poptávky se při nové poptávce po 90 dnech mažou; pro garantovanou údržbu bez nových poptávek spusťte následující SQL pravidelně:
+
+```sql
+DELETE FROM leads WHERE created_at < unixepoch() - 90*86400;
+DELETE FROM rate_limits WHERE window < CAST(unixepoch()/3600 AS INTEGER) - 24;
+```
+
+Prohlížení a vyřízení poptávek: Cloudflare dashboard → D1 → zahradky-leads → Console. Poptávka zaznamená požadavek na sedmidenní rezervaci; automaticky neblokuje skutečnou parcelu. Aplikace neposílá e-maily ani SMS. Potvrzení v rozhraní znamená úspěšný zápis do D1.
+
+## Nasazení
+
+Projekt Cloudflare Pages: `zahradky-web`. Konfigurace `wrangler.toml` používá výstup `dist` a vazbu `DB` na EU databázi `zahradky-leads`. Build zabalí API do Pages Advanced Mode `_worker.js`; `_routes.json` směruje na Worker pouze `/api/*`. Statické soubory nevyužívají Function požadavky.
+
+```sh
+npm run build
+npm test
+npx wrangler pages deploy dist --project-name zahradky-web --branch main
+```
+
+Použijte Cloudflare přihlášení nebo úzce omezený token s oprávněním Pages Write. Žádná hesla ani API tokeny nepatří do repozitáře. Přímý upload přes připojený Cloudflare nástroj může také využít `scripts/prepare-upload.mjs` a `scripts/upload-assets.py`; krátkodobý upload JWT se zadává skrytě přes stdin. GitHub Actions ověřuje build a testy; automatické publikování vyžaduje samostatné nastavení účtu nebo CI credentials.
+
+Pro vlastní doménu nejprve přidejte doménu v Pages → Custom domains. Apex `chcizahradku.cz` musí mít aktivní Cloudflare DNS zónu; přidání samotného názvu v aplikaci nebo CNAME u jiného poskytovatele připojení apex domény nezajistí. Potom ověřte HTTPS a stav Active.
+
+## Obsah před spuštěním prodeje
+
+Masterplan, stav parcel i architektonické modely jsou ilustrativní a takto označené. Ceny vycházejí ze zadání a nejsou ověřenou nabídkou výrobců. Homologaci, dodavatele, využití pozemku, územní plán, vodní zdroj a pravidla umístění každého mobilního domu je nutné ověřit jednotlivě. SPZ sama o sobě nepovoluje umístění. Nahraďte ukázkovou dostupnost skutečnou evidencí a doplňte právní identitu provozovatele a kompletní informační povinnost ke zpracování údajů před skutečným prodejem.
+
+Font Manrope je dostupný pod SIL Open Font License, viz `public/fonts/OFL.txt`.
