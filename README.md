@@ -107,3 +107,11 @@ npm test
 Nové GLB jsou v `public/models/expanded`, optimalizované původní modely v `public/models/optimized`, náhledy ve `public/images/options`. Pro běžný build se negenerují znovu. Blender je příprava assetů; v prohlížeči je vykresluje Three.js. Geometrie původních modelů se slučuje podle materiálů: výchozí parcela, sad, domek a terasa mají dohromady 31 mesh primitives místo 689. Číselný report je v `docs/model-optimization.json`. Nejde o tvrzení o konkrétním FPS na všech zařízeních.
 
 Scéna používá vykreslování na vyžádání (`frameloop="demand"`), nejvýše 1,5násobný pixel ratio a jednorázový kontaktní stín pro zvolenou konfiguraci. Modely se načítají až při výběru. Náhledy WebP se načítají postupně. Při výpadku modelu zůstává dostupný náhradní náhled; při nedostupném WebGL funguje statický obrázek a veškerá konfigurace.
+
+## Úvodní stránka a mapa první etapy
+
+Hlavní stránka je na `/`; konfigurátor na `/#konfigurator`. Původní odkazy s parametry `navrh` a `dum` otevírají konfigurátor i bez kotvy. Galerie je na `/#galerie`, informace o projektu na `/#o-nas`.
+
+Mapa první etapy používá orientační polohy měst. Pro automatické načtení oficiálního Google Maps Embed API nastavte při sestavení `VITE_GOOGLE_MAPS_EMBED_KEY` na prohlížečový klíč omezený na Maps Embed API a domény webu. Bez něj se zobrazí místní přehled všech tří měst. Výběr města otevře veřejnou vloženou mapu Google. Přímé odkazy fungují také při blokování externích rámců.
+
+Šest původních vizualizací v `public/images/galerie` ukazuje ilustrativní scénáře s modelem NOVA 4 × 3 m. Model vychází z katalogu [TŘY D](https://tryd.cz/hybridni-dum-nova/), který jako prodávajícího uvádí [DOMY Dřevostavby Development s.r.o.](https://tryd.cz/obchodni-podminky/). Čtyři cortenové záhony, pergola s ohništěm a modřínová terasa jsou volby místního konfigurátoru. Podněty pro výběr scén přinesly [případová studie osady Klecánky](https://dspace.cuni.cz/handle/20.500.11956/46873) (sousedství, společná pěšina), [šetření v českobudějovických osadách](https://dspace.jcu.cz/items/4613ffc7-022c-49ff-a63d-d4a3542faf67) (pěstování a odpočinek) a [reportáž Radiožurnálu z kolonie Jiřina](https://radiozurnal.rozhlas.cz/cerpaji-energii-v-malych-zelenych-svetech-ucime-se-za-pochodu-rikaji-zahradkari-7202677) (domek se záhony a místem k posezení na jedné zahrádce).
