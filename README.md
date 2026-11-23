@@ -84,3 +84,26 @@ blender --background --python scripts/generate_nova.py -- --render
 Výstupy: `public/models/house_nova.glb` pro web a `public/models/nova.blend` pro další úpravy. Volitelný render vzniká v `work/nova/nova-preview.png`; web používá připravený `public/images/nova-preview.webp`. Kompletní `npm run assets` spouští i tuto pipeline. Ostatní domy zůstávají beze změn. NOVA má vlastní procedurální náhradu pro případ chyby GLB a vlastní statický náhled bez WebGL. Při výběru solární technologie se pro tento sedlový domek zobrazuje samostatný pozemní panelový rám.
 
 Katalogový základ stránky je 310 990 Kč. Zdrojový formulář počítá DPH samostatně. Orientační kalkulace konfigurátoru připočítává 21 % a zaokrouhluje na 376 298 Kč. Doprava, montáž, založení a další dodavatelské příplatky nejsou zahrnuté. Tento základ a vyloučené položky se zobrazují u výběru i v rekapitulaci poptávky. Nejde o závaznou nabídku ani potvrzenou spolupráci s výrobcem.
+
+## Rozšíření vizuálního katalogu (listopad 2026)
+
+Původní zadání je uchováno beze změn v `docs/MASTERPROMPT.md`. Dodaný text končí konfigurací Wrangleru; další část původního chatu nebyla dodána.
+
+Katalog přidává **20 volitelných konceptů**: čtyři autorské domky a šestnáct zahradních doplňků. Nej­de o modely konkrétních dodavatelů ani potvrzené nabídky. Neznámá cena má hodnotu `null`; klient i server ji zahrnou do seznamu položek k nacenění, nikoli do splátky. Rekapitulace a export zachovávají všechny výběry. Starší konfigurace v odkazu a localStorage získají nové přepínače vypnuté.
+
+Doplňky mají vyhrazená místa. Volba jiné varianty ve stejném místě nahradí předchozí; např. bazén nahradí saunu. Terasový nábytek automaticky zapne terasu a vypnutí terasy odebere nábytek. Kontrola na serveru odmítne kolidující výběry. Výsadba se při použití rozšířených doplňků rozmístí po obvodu; jde o ilustrativní kompozici, nikoli projektovou dokumentaci.
+
+Generování (Blender 4.3+, pro WebP Python s Pillow):
+
+```sh
+blender -b -t 6 --python scripts/generate_expanded_assets.py
+blender -b -t 4 --python scripts/optimize_models.py
+blender -b -t 4 --python scripts/render_catalog.py
+python scripts/encode_catalog.py
+npm run build
+npm test
+```
+
+Nové GLB jsou v `public/models/expanded`, optimalizované původní modely v `public/models/optimized`, náhledy ve `public/images/options`. Pro běžný build se negenerují znovu. Blender je příprava assetů; v prohlížeči je vykresluje Three.js. Geometrie původních modelů se slučuje podle materiálů: výchozí parcela, sad, domek a terasa mají dohromady 31 mesh primitives místo 689. Číselný report je v `docs/model-optimization.json`. Nejde o tvrzení o konkrétním FPS na všech zařízeních.
+
+Scéna používá vykreslování na vyžádání (`frameloop="demand"`), nejvýše 1,5násobný pixel ratio a jednorázový kontaktní stín pro zvolenou konfiguraci. Modely se načítají až při výběru. Náhledy WebP se načítají postupně. Při výpadku modelu zůstává dostupný náhradní náhled; při nedostupném WebGL funguje statický obrázek a veškerá konfigurace.

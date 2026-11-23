@@ -1,3 +1,4 @@
+import {expandedHouses,expandedOptions,validLayout} from './expandedCatalog.js';
 export const locations = [
  {id:'KLD',name:'Kladno',area:'Vinařická hora / Pletený Újezd',distance:'5 min od sídlišť Kročehlavy a Rozdělov',soil:'Půda III.–IV. třídy',price:1200000},
  {id:'MBL',name:'Mladá Boleslav',area:'Bradlec / Kosmonosy',distance:'6 min od Severního sídliště',price:1200000},
@@ -29,20 +30,28 @@ export const techOptions=[
  {id:'toilet',name:'Eko-toaleta Cinderella Freedom',detail:'Spalovací / separační řešení bez jímky',price:89000,icon:'leaf'},
  {id:'water',name:'Dešťovka pro váš sad',detail:'Nádrž 4 000 l + automatická závlaha',price:68000,icon:'water'}
 ];
+for(const h of houses)if(h.id!=='none'&&!h.preview)h.preview=`/images/options/tiny_${h.id}.webp`;
+const previews={orchardXXL:'orchard_trees',terrace:'terrace',beds:'corten_beds',firepit:'firepit_pergola',solar:'solar_tech',water:'water_tech',toilet:'offgrid_tech'};
+for(const o of [...gardenOptions,...techOptions])o.preview=`/images/options/${previews[o.id]}.webp`;
+houses.push(...expandedHouses);
+gardenOptions.push(...expandedOptions.filter(o=>o.category!=='Technologie'));
+techOptions.push(...expandedOptions.filter(o=>o.category==='Technologie'));
 export const defaultConfig={location:'KLD',plot:14,house:'liberte',orchardXXL:true,terrace:true,beds:false,firepit:false,solar:false,toilet:false,water:false,payment:'finance',downPercent:15,years:10};
+Object.assign(defaultConfig,Object.fromEntries(expandedOptions.map(o=>[o.id,false])));
+export const normalizeConfig=c=>({...defaultConfig,...c});
 export const money=(value)=>new Intl.NumberFormat('cs-CZ',{style:'currency',currency:'CZK',maximumFractionDigits:0}).format(value);
 export function plotStatus(n){return [3,8,19,24,29].includes(n)?'sold':[5,11,17,26].includes(n)?'reserved':'free'}
 export function validateConfig(c){
  if(!c||!locations.some(l=>l.id===c.location)||!houses.some(h=>h.id===c.house))return false;
  if(!Number.isInteger(c.plot)||c.plot<1||c.plot>30||plotStatus(c.plot)!=='free')return false;
  if(!['finance','cash'].includes(c.payment)||!Number.isInteger(c.downPercent)||c.downPercent<15||c.downPercent>70||!Number.isInteger(c.years)||c.years<3||c.years>10)return false;
- return [...gardenOptions,...techOptions].every(o=>typeof c[o.id]==='boolean');
+ return validLayout(c)&&[...gardenOptions,...techOptions].every(o=>typeof c[o.id]==='boolean'||(o.concept&&c[o.id]===undefined));
 }
 export function calculate(c){
  const location=locations.find(l=>l.id===c.location),house=houses.find(h=>h.id===c.house);
- const items=[{name:`Sad 300 m² · ${location.name}`,price:location.price},...(house.price?[{name:house.name,price:house.price}]:[]),...[...gardenOptions,...techOptions].filter(o=>c[o.id]).map(({name,price})=>({name,price}))];
- const total=items.reduce((sum,item)=>sum+item.price,0),down=c.payment==='cash'?total:Math.round(total*c.downPercent/100),principal=total-down,n=c.years*12,r=.079/12,power=Math.pow(1+r,n);
+ const items=[{name:`Sad 300 m² · ${location.name}`,price:location.price},...((house.price||house.concept)?[{name:house.name,price:house.price}]:[]),...[...gardenOptions,...techOptions].filter(o=>c[o.id]).map(({name,price})=>({name,price}))];
+ const total=items.reduce((sum,item)=>sum+(item.price??0),0),down=c.payment==='cash'?total:Math.round(total*c.downPercent/100),principal=total-down,n=c.years*12,r=.079/12,power=Math.pow(1+r,n);
  const monthly=c.payment==='cash'?0:principal*(r*power)/(power-1);
- return {location,house,items,total,down,principal,monthly,n,repayment:monthly*n,interest:monthly*n-principal,paidTotal:down+monthly*n};
+ return {location,house,items,unpriced:items.filter(i=>i.price===null),total,down,principal,monthly,n,repayment:monthly*n,interest:monthly*n-principal,paidTotal:down+monthly*n};
 }
-export function serializableConfig(c){return Object.fromEntries(Object.keys(defaultConfig).map(k=>[k,c[k]]))}
+export function serializableConfig(c){return Object.fromEntries(Object.keys(defaultConfig).map(k=>[k,c[k]??defaultConfig[k]]))}

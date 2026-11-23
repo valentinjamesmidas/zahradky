@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "units": "meters",
+  "upAxis": "Y",
+  "license": "Original procedural models created for this project.",
+  "items": [
+    {
+      "id": "studio",
+      "name": "Studio Solar",
+      "category": "Domky",
+      "description": "Kompaktní domek s terasou a střešními panely.",
+      "model": "models/expanded/studio.glb",
+      "thumbnail": "images/options/studio.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 185512,
+      "dimensionsMeters": {
+        "x": 7.273,
+        "y": 3.626,
+        "z": 4.731
+      },
+      "meshFaces": 1172
+    },
+    {
+      "id": "panorama",
+      "name": "Panorama",
+      "category": "Domky",
+      "description": "Široké čelní prosklení a krytá pobytová terasa.",
+      "model": "models/expanded/panorama.glb",
+      "thumbnail": "images/options/panorama.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 137324,
+      "dimensionsMeters": {
+        "x": 7.873,
+        "y": 3.53,
+        "z": 4.731
+      },
+      "meshFaces": 836
+    },
+    {
+      "id": "nordic",
+      "name": "Nordic Loft",
+      "category": "Domky",
+      "description": "Sedlová střecha, dřevěný obklad a komín.",
+      "model": "models/expanded/nordic.glb",
+      "thumbnail": "images/options/nordic.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 146680,
+      "dimensionsMeters": {
+        "x": 7.273,
+        "y": 4.68,
+        "z": 4.731
+      },
+      "meshFaces": 896
+    },
+    {
+      "id": "pavilion",
+      "name": "Zahradní pavilon",
+      "category": "Domky",
+      "description": "Prosklený zahradní prostor s dřevěnými žebry.",
+      "model": "models/expanded/pavilion.glb",
+      "thumbnail": "images/options/pavilion.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 112232,
+      "dimensionsMeters": {
+        "x": 6.498,
+        "y": 3.635,
+        "z": 4.893
+      },
+      "meshFaces": 718
+    },
+    {
+      "id": "pergola",
+      "name": "Pergola Lounge",
+      "category": "Odpočinek",
+      "description": "Lamely, posezení a řetěz teplých světel.",
+      "model": "models/expanded/pergola.glb",
+      "thumbnail": "images/options/pergola.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 172428,
+      "dimensionsMeters": {
+        "x": 4.5,
+        "y": 2.87,
+        "z": 3.544
+      },
+      "meshFaces": 1390
+    },
+    {
+      "id": "greenhouse",
+      "name": "Skleník Atelier",
+      "category": "Pěstování",
+      "description": "Prosklený skleník s antracitovými profily.",
+      "model": "models/expanded/greenhouse.glb",
+      "thumbnail": "images/options/greenhouse.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 167152,
+      "dimensionsMeters": {
+        "x": 3.53,
+        "y": 3.593,
+        "z": 4.241
+      },
+      "meshFaces": 1280
+    },
+    {
+      "id": "shed",
+      "name": "Zahradní sklad",
+      "category": "Vybavení",
+      "description": "Dřevěný domek pro nářadí a sezónní vybavení.",
+      "model": "models/expanded/shed.glb",
+      "thumbnail": "images/options/shed.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 42048,
+      "dimensionsMeters": {
+        "x": 3.3,
+        "y": 2.54,
+        "z": 2.805
+      },
+      "meshFaces": 276
+    },
+    {
+      "id": "sauna",
+      "name": "Sauna Cedar",
+      "category": "Wellness",
+      "description": "Zahradní sauna s teráskou a prosklenými dveřmi.",
+      "model": "models/expanded/sauna.glb",
+      "thumbnail": "images/options/sauna.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 67252,
+      "dimensionsMeters": {
+        "x": 3.3,
+        "y": 3.4,
+        "z": 3.745
+      },
+      "meshFaces": 408
+    },
+    {
+      "id": "tub",
+      "name": "Koupací sud",
+      "category": "Wellness",
+      "description": "Dřevěný sud s venkovními kamny a schůdky.",
+      "model": "models/expanded/tub.glb",
+      "thumbnail": "images/options/tub.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 143436,
+      "dimensionsMeters": {
+        "x": 2.81,
+        "y": 2.49,
+        "z": 2.97
+      },
+      "meshFaces": 1018
+    },
+    {
+      "id": "pool",
+      "name": "Ochlazovací bazén",
+      "category": "Wellness",
+      "description": "Kompaktní bazén s dřevěným lemem a žebříkem.",
+      "model": "models/expanded/pool.glb",
+      "thumbnail": "images/options/pool.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 14208,
+      "dimensionsMeters": {
+        "x": 4.35,
+        "y": 1.5,
+        "z": 2.73
+      },
+      "meshFaces": 72
+    },
+    {
+      "id": "kitchen",
+      "name": "Venkovní kuchyň",
+      "category": "Odpočinek",
+      "description": "Gril, pracovní plocha a dřez v jedné sestavě.",
+      "model": "models/expanded/kitchen.glb",
+      "thumbnail": "images/options/kitchen.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 24540,
+      "dimensionsMeters": {
+        "x": 3.12,
+        "y": 1.525,
+        "z": 0.815
+      },
+      "meshFaces": 144
+    },
+    {
+      "id": "dining",
+      "name": "Jídelní sestava",
+      "category": "Odpočinek",
+      "description": "Dřevěný stůl a čtyři čalouněná křesla.",
+      "model": "models/expanded/dining.glb",
+      "thumbnail": "images/options/dining.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 54284,
+      "dimensionsMeters": {
+        "x": 2.0,
+        "y": 2.02,
+        "z": 2.65
+      },
+      "meshFaces": 358
+    },
+    {
+      "id": "lounge",
+      "name": "Lehátka a slunečník",
+      "category": "Odpočinek",
+      "description": "Dvojice lehátek s přírodním čalouněním.",
+      "model": "models/expanded/lounge.glb",
+      "thumbnail": "images/options/lounge.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 22176,
+      "dimensionsMeters": {
+        "x": 4.715,
+        "y": 2.85,
+        "z": 3.05
+      },
+      "meshFaces": 112
+    },
+    {
+      "id": "swing",
+      "name": "Zahradní houpačka",
+      "category": "Odpočinek",
+      "description": "Dřevěná závěsná lavice pro dva.",
+      "model": "models/expanded/swing.glb",
+      "thumbnail": "images/options/swing.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 11728,
+      "dimensionsMeters": {
+        "x": 3.4,
+        "y": 2.593,
+        "z": 1.714
+      },
+      "meshFaces": 66
+    },
+    {
+      "id": "bikes",
+      "name": "Stojan na kola",
+      "category": "Vybavení",
+      "description": "Čtyři místa pro odložení jízdních kol.",
+      "model": "models/expanded/bikes.glb",
+      "thumbnail": "images/options/bikes.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 13308,
+      "dimensionsMeters": {
+        "x": 2.5,
+        "y": 0.95,
+        "z": 0.65
+      },
+      "meshFaces": 78
+    },
+    {
+      "id": "compost",
+      "name": "Dvoukomorový kompostér",
+      "category": "Pěstování",
+      "description": "Provětrávaná dřevěná sestava pro zahradní kompost.",
+      "model": "models/expanded/compost.glb",
+      "thumbnail": "images/options/compost.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 29156,
+      "dimensionsMeters": {
+        "x": 2.08,
+        "y": 1.0,
+        "z": 1.08
+      },
+      "meshFaces": 192
+    },
+    {
+      "id": "barrel",
+      "name": "Nádrž na dešťovku",
+      "category": "Technologie",
+      "description": "Nadzemní nádrž s dřevěným obkladem a kohoutem.",
+      "model": "models/expanded/barrel.glb",
+      "thumbnail": "images/options/barrel.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 42480,
+      "dimensionsMeters": {
+        "x": 1.06,
+        "y": 1.95,
+        "z": 1.18
+      },
+      "meshFaces": 248
+    },
+    {
+      "id": "beds",
+      "name": "Cortenové záhony",
+      "category": "Pěstování",
+      "description": "Čtyři samostatné záhony s osázením.",
+      "model": "models/expanded/beds.glb",
+      "thumbnail": "images/options/beds.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 205572,
+      "dimensionsMeters": {
+        "x": 4.401,
+        "y": 2.0,
+        "z": 3.945
+      },
+      "meshFaces": 1968
+    },
+    {
+      "id": "canopy",
+      "name": "Solární přístřešek",
+      "category": "Technologie",
+      "description": "Přístřešek s osmi panely a bateriovou skříní.",
+      "model": "models/expanded/canopy.glb",
+      "thumbnail": "images/options/canopy.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 179284,
+      "dimensionsMeters": {
+        "x": 4.4,
+        "y": 2.976,
+        "z": 3.37
+      },
+      "meshFaces": 1248
+    },
+    {
+      "id": "lights",
+      "name": "Osvětlení cesty",
+      "category": "Technologie",
+      "description": "Čtveřice nízkých světel s teplými difuzory.",
+      "model": "models/expanded/lights.glb",
+      "thumbnail": "images/options/lights.webp",
+      "priceCzk": null,
+      "status": "concept",
+      "sizeBytes": 43732,
+      "dimensionsMeters": {
+        "x": 3.26,
+        "y": 0.885,
+        "z": 0.26
+      },
+      "meshFaces": 216
+    }
+  ]
+}

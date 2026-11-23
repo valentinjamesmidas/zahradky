@@ -1,0 +1,146 @@
+{
+  "corten_beds": {
+    "before": {
+      "bytes": 75868,
+      "meshes": 40,
+      "primitives": 40
+    },
+    "after": {
+      "bytes": 54592,
+      "meshes": 7,
+      "primitives": 7
+    }
+  },
+  "firepit_pergola": {
+    "before": {
+      "bytes": 122100,
+      "meshes": 44,
+      "primitives": 44
+    },
+    "after": {
+      "bytes": 106212,
+      "meshes": 6,
+      "primitives": 6
+    }
+  },
+  "orchard_standard": {
+    "before": {
+      "bytes": 108176,
+      "meshes": 32,
+      "primitives": 32
+    },
+    "after": {
+      "bytes": 103248,
+      "meshes": 7,
+      "primitives": 7
+    }
+  },
+  "orchard_trees": {
+    "before": {
+      "bytes": 395668,
+      "meshes": 149,
+      "primitives": 149
+    },
+    "after": {
+      "bytes": 347432,
+      "meshes": 8,
+      "primitives": 8
+    }
+  },
+  "plot_base": {
+    "before": {
+      "bytes": 546120,
+      "meshes": 286,
+      "primitives": 286
+    },
+    "after": {
+      "bytes": 378036,
+      "meshes": 11,
+      "primitives": 11
+    }
+  },
+  "solar_tech": {
+    "before": {
+      "bytes": 30128,
+      "meshes": 5,
+      "primitives": 5
+    },
+    "after": {
+      "bytes": 29900,
+      "meshes": 2,
+      "primitives": 2
+    }
+  },
+  "terrace": {
+    "before": {
+      "bytes": 293640,
+      "meshes": 61,
+      "primitives": 61
+    },
+    "after": {
+      "bytes": 306060,
+      "meshes": 4,
+      "primitives": 4
+    }
+  },
+  "tiny_anna": {
+    "before": {
+      "bytes": 930488,
+      "meshes": 221,
+      "primitives": 221
+    },
+    "after": {
+      "bytes": 934248,
+      "meshes": 7,
+      "primitives": 7
+    }
+  },
+  "tiny_baluchon": {
+    "before": {
+      "bytes": 868008,
+      "meshes": 198,
+      "primitives": 198
+    },
+    "after": {
+      "bytes": 877888,
+      "meshes": 8,
+      "primitives": 8
+    }
+  },
+  "tiny_liberte": {
+    "before": {
+      "bytes": 841308,
+      "meshes": 193,
+      "primitives": 193
+    },
+    "after": {
+      "bytes": 851636,
+      "meshes": 8,
+      "primitives": 8
+    }
+  },
+  "tiny_millhome": {
+    "before": {
+      "bytes": 865656,
+      "meshes": 199,
+      "primitives": 199
+    },
+    "after": {
+      "bytes": 875232,
+      "meshes": 8,
+      "primitives": 8
+    }
+  },
+  "water_tech": {
+    "before": {
+      "bytes": 8272,
+      "meshes": 1,
+      "primitives": 1
+    },
+    "after": {
+      "bytes": 8268,
+      "meshes": 1,
+      "primitives": 1
+    }
+  }
+}
