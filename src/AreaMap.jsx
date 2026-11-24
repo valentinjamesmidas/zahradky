@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowUpRight, ChevronRight, LocateFixed, MapPin, RotateCcw } from 'lucide-react';
 import { locations } from './catalog.js';
 
-const cities = [
+export const firstStageCities = [
   {id: 'MBL', lat: 50.412, lng: 14.904},
   {id: 'KLD', lat: 50.148, lng: 14.106},
   {id: 'PRI', lat: 49.690, lng: 14.011}
@@ -25,12 +25,12 @@ function CompassRose() {
 export default function AreaMap() {
   const [city, setCity] = useState(null);
   return <section className="area-section content-section" id="lokality" aria-labelledby="area-title">
-    <div className="section-heading"><span className="section-kicker"><MapPin size={15}/> Lokality</span><h2 id="area-title">Etapa I – kde stavíme</h2></div>
+    <div className="section-heading"><span className="section-kicker"><MapPin size={15}/> Lokality</span><h2 id="area-title">Tři města první etapy</h2></div>
     <div className="area-layout">
       <div className="area-list">
         <p>Vyberte město na mapě nebo v seznamu.</p>
         <div className="atlas-options" role="group" aria-label="Lokality první etapy">
-          {cities.map(item => <button className="atlas-option" type="button" key={item.id} aria-pressed={city?.id === item.id} onClick={() => setCity(item)}>
+          {firstStageCities.map(item => <button className="atlas-option" type="button" key={item.id} aria-pressed={city?.id === item.id} onClick={() => setCity(item)}>
             <span className="atlas-option-icon"><MapPin size={18} strokeWidth={1.5}/></span>
             <span><strong>{item.name}</strong><small>{item.area}</small></span><ChevronRight size={17}/>
           </button>)}
@@ -44,7 +44,7 @@ export default function AreaMap() {
         <div className="atlas-window" role="group" aria-label="Interaktivní mapa středních Čech">
           <div className={'atlas-plate' + (city ? ' is-zoomed' : '')} style={{transformOrigin: city ? city.x + ' ' + city.y : 'center'}}>
             <img src="/images/stredni-cechy.svg" width="760" height="500" loading="lazy" alt="Hranice Středočeského kraje, Praha a řeky Vltava a Labe."/>
-            {cities.map(item => <button key={item.id} type="button" className={'atlas-site site-' + item.id} style={{left: item.x, top: item.y}}
+            {firstStageCities.map(item => <button key={item.id} type="button" className={'atlas-site site-' + item.id} style={{left: item.x, top: item.y}}
               aria-label={'Vybrat na mapě – ' + item.name} aria-pressed={city?.id === item.id} onClick={() => setCity(item)}>
               <span className="atlas-dot"/><span className="atlas-tag">{item.name}</span>
             </button>)}

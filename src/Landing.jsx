@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowUpRight, ChevronLeft, ChevronRight, Expand, MapPin, X } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Expand, House, MapPin, X } from 'lucide-react';
 import { houses } from './catalog.js';
-import AreaMap from './AreaMap.jsx';
+import AreaMap, { firstStageCities } from './AreaMap.jsx';
 
 const nova = houses.find(house => house.id === 'nova');
 const reasons = [
   ['Vyberete si oblast', 'Porovnejte na mapě Mladou Boleslav, Kladno a Příbram podle toho, odkud budete na zahrádku jezdit.'],
-  ['Sestavíte si zahrádku', 'K sadu můžete přidat jeden z pěti domků, modřínovou terasu nebo vyvýšené záhony.'],
+  ['Sestavíte si zahrádku', 'K sadu můžete přidat domek, modřínovou terasu nebo vyvýšené záhony.'],
   ['Projdete si návrh ve 3D', 'Otočte si scénu, přibližte si domek a přepněte z denního světla na večerní.'],
   ['Poptáte vybranou sestavu', 'Před odesláním nezávazné poptávky uvidíte zvolené vybavení i rozpis orientační ceny.']
 ];
@@ -22,7 +22,7 @@ const imagePath = (id, width) => '/images/galerie/' + id + '-' + width + '.webp'
 function Photo({scene, hero=false, expanded=false}) {
   return <img src={imagePath(scene.id, 960)}
     srcSet={[480, 960, 1536].map(width => imagePath(scene.id, width) + ' ' + width + 'w').join(', ')}
-    sizes={hero ? '(max-width: 630px) 960px, 100vw' : expanded ? '100vw' : '(max-width: 630px) 94vw, (max-width: 980px) 46vw, 31vw'}
+    sizes={hero ? '(max-width: 630px) 960px, 100vw' : expanded ? '100vw' : '(max-width: 630px) 94vw, 46vw'}
     width="1536" height="1024" loading={hero || expanded ? 'eager' : 'lazy'}
     fetchPriority={hero ? 'high' : undefined} decoding="async" alt={scene.alt}/>;
 }
@@ -41,14 +41,14 @@ function Gallery() {
     return () => { document.body.style.overflow = previous; };
   }, [open]);
   return <section className="gallery-section content-section" id="galerie" aria-labelledby="gallery-title">
-    <div className="section-heading"><h2 id="gallery-title">Galerie zahrádek a kolonie</h2></div>
+    <div className="section-heading"><span className="section-kicker">Galerie vizualizací</span><h2 id="gallery-title">Ze života zahrádky</h2></div>
     <div className="garden-gallery">{scenes.map((scene, i) => <figure key={scene.id}>
       <button className="photo-frame" aria-label={'Zvětšit snímek – ' + scene.title} aria-haspopup="dialog" onClick={() => { setIndex(i); setOpen(true); }}>
-        <Photo scene={scene}/><span className="photo-label">Vizualizace</span><span className="expand-icon"><Expand size={16}/></span>
+        <Photo scene={scene}/><span className="expand-icon"><Expand size={16}/></span>
       </button>
       <figcaption><h3>{scene.title}</h3><p>{scene.caption}</p></figcaption>
     </figure>)}</div>
-    <a className="garden-button gallery-cta" href="/#konfigurator">Navrhnout si vlastní zahrádku <ArrowUpRight size={18}/></a>
+    <a className="garden-button gallery-cta" href="/#konfigurator">Navrhnout si vlastní zahrádku</a>
     {open && <dialog className="lightbox" ref={dialog} aria-labelledby="lightbox-title"
       onClose={() => setOpen(false)} onClick={e => {if (e.target === dialog.current) dialog.current.close();}}
       onKeyDown={e => {if (e.key === 'ArrowLeft') move(-1); if (e.key === 'ArrowRight') move(1);}}>
@@ -65,29 +65,66 @@ function Gallery() {
   </section>;
 }
 
+function DesignPicker() {
+  const [city, setCity] = useState('');
+  const [house, setHouse] = useState('');
+  const params = new URLSearchParams();
+  if (city) params.set('lokalita', city);
+  if (house) params.set('dum', house);
+  const href = '/' + (params.size ? '?' + params : '') + '#konfigurator';
+  return <div className="design-picker" role="group" aria-label="Výchozí nastavení konfigurátoru">
+    <label><MapPin aria-hidden="true"/><span>Lokalita
+      <select aria-label="Lokalita" value={city} onChange={event => setCity(event.target.value)}>
+        <option value="">Vybrat později</option>
+        {firstStageCities.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+      </select></span><ChevronDown className="select-chevron" aria-hidden="true"/></label>
+    <label><House aria-hidden="true"/><span>Domek
+      <select aria-label="Domek" value={house} onChange={event => setHouse(event.target.value)}>
+        <option value="">Vybrat později</option>
+        {houses.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+      </select></span><ChevronDown className="select-chevron" aria-hidden="true"/></label>
+    <a className="garden-button picker-cta" href={href}>Otevřít konfigurátor</a>
+  </div>;
+}
+
+const heroScenes = [scenes[2], scenes[0], scenes[4]];
+function Welcome() {
+  const [active, setActive] = useState(0);
+  function changeScene(direction) {
+    setActive(index => (index + direction + heroScenes.length) % heroScenes.length);
+  }
+  return <section id="uvod" className="garden-hero" aria-labelledby="welcome-title">
+    <Photo scene={heroScenes[active]} hero/>
+    <div className="hero-inner">
+      <span className="hero-kicker">Soukromé sady · 300 m²</span>
+      <h1 id="welcome-title">Vlastní zahrádka<br/><em>ve středních Čechách.</em></h1>
+      <p>Vyberte si místo pro svůj sad. Domek, terasu i záhony si rozvrhnete ve 3D podle sebe.</p>
+      <DesignPicker/>
+      <a className="hero-more" href="/#prvni-duvod">Zjistit víc o zahrádkách</a>
+    </div>
+    <div className="scene-strip">
+      <span aria-live="polite">Vizualizace · {heroScenes[active].title}</span>
+      <button type="button" aria-label="Předchozí pohled na zahrádku" onClick={() => changeScene(-1)}><ChevronLeft/></button>
+      <button type="button" aria-label="Další pohled na zahrádku" onClick={() => changeScene(1)}><ChevronRight/></button>
+    </div>
+  </section>;
+}
+
 export default function Landing() {
   return <main className="landing">
-    <section id="uvod" className="garden-hero">
-      <Photo scene={scenes[2]} hero/>
-      <div className="hero-inner">
-        <a href="/#lokality" className="hero-region"><MapPin size={15}/> Lokality první etapy</a>
-        <h1>Zahrádkářské kolonie <span>Střední Čechy</span></h1>
-        <p>Prohlédněte si lokality první etapy a navrhněte si zahrádku podle sebe.</p>
-        <a className="garden-button hero-button" href="/#prvni-duvod">Zjisti víc <ArrowDown size={17}/></a>
+    <Welcome/>
+    <section className="benefits content-section" id="prvni-duvod" aria-labelledby="benefits-title">
+      <div className="benefit-intro"><span className="section-kicker">O zahrádkách</span>
+        <h2 id="benefits-title">Od první volby<br/>k vlastnímu sadu.</h2>
+        <a className="section-link" href="/#lokality">Prohlédnout lokality</a>
       </div>
-      <span className="hero-credit">Vizualizace · Domek NOVA</span>
-    </section>
-    <section className="benefits content-section" aria-labelledby="benefits-title">
-      <h2 id="benefits-title">Proč právě naše zahrádky</h2>
-      <ol>{reasons.map(([title, detail], i) => <li id={i === 0 ? 'prvni-duvod' : undefined} key={title}>
-        <span className="reason-num" aria-hidden="true">0{i + 1}</span><div><h3>{title}</h3><p>{detail}</p></div>
-      </li>)}</ol>
+      <ol>{reasons.map(([title, detail]) => <li key={title}><h3>{title}</h3><p>{detail}</p></li>)}</ol>
     </section>
     <AreaMap/><Gallery/>
-    <section id="o-nas" className="about-section content-section"><h2>O nás</h2><div>
+    <section id="o-nas" className="about-section content-section"><div className="about-photo"><Photo scene={scenes[5]}/></div><div><span className="section-kicker">O nás</span><h2>Zahrádky mezi sady</h2>
       <p>CHCI ZAHRÁDKU.cz představuje koncept soukromých sadů o rozloze 300 m². V konfigurátoru si sestavíte návrh a předáte ho k ověření dostupnosti a podmínek pro konkrétní parcelu.</p>
       <p>Podkladem pro model NOVA je zahradní domek značky TŘY D společnosti DOMY Dřevostavby Development s.r.o. Galerie ukazuje, jak může domek v zahradě vypadat.</p>
-      <a href={nova.source} target="_blank" rel="noreferrer">Domek NOVA u výrobce <ArrowUpRight size={15}/></a>
+      <a href={nova.source} target="_blank" rel="noreferrer">Domek NOVA u výrobce</a>
     </div></section>
   </main>;
 }

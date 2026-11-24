@@ -1,17 +1,24 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowUpRight, Leaf, Menu, X } from 'lucide-react';
+import { Leaf, Menu, X } from 'lucide-react';
 import Landing from './Landing.jsx';
 import './style.css';
 import './landing.css';
 
 const Configurator = lazy(() => import('./App.jsx'));
 const links = [
-  ['Úvod', 'uvod'], ['Konfigurátor', 'konfigurator'], ['Galerie', 'galerie'], ['O nás', 'o-nas']
+  ['Úvod', 'uvod'], ['Lokality', 'lokality'], ['Konfigurátor', 'konfigurator'], ['Galerie', 'galerie'], ['O nás', 'o-nas']
 ];
 
 function Header({ section, isConfig }) {
   const [open, setOpen] = useState(false);
+  const [atTop, setAtTop] = useState(() => window.scrollY < 16);
+  useEffect(() => {
+    const update = () => setAtTop(window.scrollY < 16);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, []);
   const toggle = React.useRef(null);
   const header = React.useRef(null);
   useEffect(() => {
@@ -34,7 +41,7 @@ function Header({ section, isConfig }) {
       window.removeEventListener('focusin', outside);
     };
   }, [open]);
-  return <header className="garden-header" ref={header}>
+  return <header className={'garden-header' + (!isConfig ? ' on-landing' : '') + (atTop && !open ? ' at-top' : '')} ref={header}>
     <div className="header-content">
       <a className="brand" href="/#uvod" aria-label="CHCI ZAHRÁDKU.cz – úvod" onClick={() => setOpen(false)}>
         <span className="brand-mark"><Leaf size={25} strokeWidth={1.4}/></span>
@@ -45,7 +52,7 @@ function Header({ section, isConfig }) {
           aria-current={(isConfig ? id === 'konfigurator' : id === section) ? 'location' : undefined}
           onClick={() => setOpen(false)}>{title}</a>)}
       </nav>
-      <a className="garden-button nav-cta" href="/#konfigurator" onClick={() => setOpen(false)}>Navrhnout si zahrádku <ArrowUpRight size={16}/></a>
+      <a className="garden-button nav-cta" href="/#konfigurator" onClick={() => setOpen(false)}>Navrhnout zahrádku</a>
       <button ref={toggle} className="menu-toggle" aria-label={open ? 'Zavřít menu' : 'Otevřít menu'}
         aria-controls="hlavni-menu" aria-expanded={open} onClick={() => setOpen(!open)}>
         {open ? <X/> : <Menu/>}
@@ -86,7 +93,7 @@ function Site() {
   return <>
     <Header key={url.href} section={anchor || 'uvod'} isConfig={isConfig}/>
     {isConfig ? <Suspense fallback={<main className="config-loading">Načítání konfigurátoru…</main>}><Configurator/></Suspense> : <Landing/>}
-    <footer className="garden-footer"><a href="/#uvod"><Leaf size={18}/> CHCI ZAHRÁDKU.cz</a><a href="/#konfigurator">Konfigurátor <ArrowUpRight size={15}/></a></footer>
+    <footer className="garden-footer"><a href="/#uvod"><Leaf size={18}/> CHCI ZAHRÁDKU.cz</a><a href="/#konfigurator">Konfigurátor</a></footer>
   </>;
 }
 
