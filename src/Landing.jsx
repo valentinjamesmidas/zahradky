@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Expand, MapPin, X } from 'lucide-react';
-import { houses, locations } from './catalog.js';
+import { ArrowDown, ArrowUpRight, ChevronLeft, ChevronRight, Expand, MapPin, X } from 'lucide-react';
+import { houses } from './catalog.js';
+import AreaMap from './AreaMap.jsx';
 
 const nova = houses.find(house => house.id === 'nova');
 const reasons = [
@@ -24,58 +25,6 @@ function Photo({scene, hero=false, expanded=false}) {
     sizes={hero ? '(max-width: 630px) 960px, 100vw' : expanded ? '100vw' : '(max-width: 630px) 94vw, (max-width: 980px) 46vw, 31vw'}
     width="1536" height="1024" loading={hero || expanded ? 'eager' : 'lazy'}
     fetchPriority={hero ? 'high' : undefined} decoding="async" alt={scene.alt}/>;
-}
-
-const cities = [
-  {id:'MBL', lat:50.412, lng:14.904}, {id:'KLD', lat:50.148, lng:14.106},
-  {id:'PRI', lat:49.690, lng:14.011}
-].map(city => ({...city, name:locations.find(item => item.id === city.id).name}));
-const mapsLink = name => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name + ', Česko');
-const embedKey = import.meta.env.VITE_GOOGLE_MAPS_EMBED_KEY;
-
-function AreaMap() {
-  const [city, setCity] = useState(null);
-  const [showGoogle, setShowGoogle] = useState(Boolean(embedKey));
-  const query = city ? city.name + ', Česko' : 'Středočeský kraj, Česko';
-  const src = embedKey ? (city
-    ? 'https://www.google.com/maps/embed/v1/place?' + new URLSearchParams({key:embedKey, q:query, zoom:12, language:'cs'})
-    : 'https://www.google.com/maps/embed/v1/view?' + new URLSearchParams({key:embedKey, center:'50.05,14.47', zoom:7, language:'cs'}))
-    : 'https://www.google.com/maps?' + new URLSearchParams(city
-      ? {q:query, z:12, output:'embed', hl:'cs'}
-      : {ll:'50.05,14.47', z:7, output:'embed', hl:'cs'});
-  function selectCity(item) {
-    setCity(item);
-    setShowGoogle(true);
-  }
-  return <section className="area-section content-section" id="lokality" aria-labelledby="area-title">
-    <div className="section-heading"><span className="section-kicker"><MapPin size={15}/> Lokality</span><h2 id="area-title">Etapa I – kde stavíme</h2></div>
-    <div className="area-layout">
-      <div className="area-list">
-        <p>Vyberte město a prohlédněte si jeho okolí.</p>
-        {cities.map(item => <div className="city-row" key={item.id}>
-          <button type="button" aria-pressed={city?.id === item.id} onClick={() => selectCity(item)}><span>{item.name}</span><ArrowRight size={19}/></button>
-          <a href={mapsLink(item.name)} target="_blank" rel="noreferrer" aria-label={'Otevřít v Google Mapách – ' + item.name}>Otevřít v Google Mapách <ArrowUpRight size={14}/></a>
-        </div>)}
-        {city && <a className="city-config" href={'/?lokalita=' + city.id + '#konfigurator'}>Vybrat tuto lokalitu v konfigurátoru <ArrowUpRight size={15}/></a>}
-      </div>
-      <div>
-        <div className="area-map">
-          {showGoogle ? <iframe src={src} title={'Google Mapy – ' + (city?.name || 'tři oblasti první etapy')} loading="lazy" referrerPolicy="strict-origin-when-cross-origin"/> :
-            <div className="region-map" aria-label="Orientační mapa měst ve středních Čechách">
-              <span className="north">↑ S</span>
-              {cities.map(item => <button className="map-pin" key={item.id} style={{left:((item.lng - 13.6) / 1.8 * 100) + '%', top:((50.67 - item.lat) / 1.22 * 100) + '%'}}
-                onClick={() => selectCity(item)}><MapPin size={23}/>{item.name}</button>)}
-              <span className="prague">• Praha</span>
-            </div>}
-          <button className="map-reset" onClick={() => {
-            if (city) {setCity(null); setShowGoogle(Boolean(embedKey));}
-            else setShowGoogle(!showGoogle);
-          }}>{city ? 'Všechny lokality' : showGoogle ? 'Přehled měst' : 'Zobrazit Google Mapy'}</button>
-        </div>
-        <p className="map-note">Mapa zobrazuje orientační polohu měst.</p>
-      </div>
-    </div>
-  </section>;
 }
 
 function Gallery() {
