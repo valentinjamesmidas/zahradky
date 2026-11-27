@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ChevronDown, ChevronLeft, ChevronRight, Expand, House, MapPin, X } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Expand, House, MapPin, SlidersHorizontal, X } from 'lucide-react';
 import { houses } from './catalog.js';
 import AreaMap, { firstStageCities } from './AreaMap.jsx';
 
@@ -85,11 +85,11 @@ function DesignPicker() {
         <option value="">Vybrat později</option>
         {houses.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
       </select></span><ChevronDown className="select-chevron" aria-hidden="true"/></label>
-    <a className="garden-button picker-cta" href={href}>Otevřít konfigurátor</a>
+    <a className="garden-button picker-cta" href={href}><SlidersHorizontal size={17} aria-hidden="true"/> Otevřít konfigurátor</a>
   </div>;
 }
 
-const heroScenes = [scenes[2], scenes[0], scenes[4]];
+const heroScenes = [scenes[0], scenes[2], scenes[4]];
 function Welcome() {
   const [active, setActive] = useState(0);
   function changeScene(direction) {
@@ -98,16 +98,18 @@ function Welcome() {
   return <section id="uvod" className="garden-hero" aria-labelledby="welcome-title">
     <Photo scene={heroScenes[active]} hero/>
     <div className="hero-inner">
-      <span className="hero-kicker">Soukromé sady · 300 m²</span>
-      <h1 id="welcome-title">Zahrádkářské kolonie <em>Střední Čechy</em></h1>
-      <p>Prohlédněte si lokality první etapy a navrhněte si zahrádku podle sebe.</p>
+      <span className="hero-kicker">Soukromé ovocné sady</span>
+      <h1 id="welcome-title">Vlastní zahrádka <strong>ve středních Čechách.</strong></h1>
+      <p>Vyberte si lokalitu pro svůj sad o rozloze 300 m².<br/> Domek, terasu i záhony si pak sestavíte ve 3D.</p>
       <DesignPicker/>
-      <a className="hero-more" href="/#prvni-duvod">Zjisti víc</a>
     </div>
-    <div className="scene-strip">
-      <span aria-live="polite">Vizualizace · {heroScenes[active].title}</span>
-      <button type="button" aria-label="Předchozí pohled na zahrádku" onClick={() => changeScene(-1)}><ChevronLeft/></button>
-      <button type="button" aria-label="Další pohled na zahrádku" onClick={() => changeScene(1)}><ChevronRight/></button>
+    <div className="hero-controls">
+      <a className="hero-more" href="/#lokality"><ChevronDown aria-hidden="true"/> Prohlédnout lokality</a>
+      <div className="scene-strip">
+        <span aria-live="polite">Vizualizace · {heroScenes[active].title}</span>
+        <button type="button" aria-label="Předchozí pohled na zahrádku" onClick={() => changeScene(-1)}><ChevronLeft/></button>
+        <button type="button" aria-label="Další pohled na zahrádku" onClick={() => changeScene(1)}><ChevronRight/></button>
+      </div>
     </div>
   </section>;
 }
