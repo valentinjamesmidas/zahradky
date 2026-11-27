@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { ArrowUpRight, ChevronRight, LocateFixed, MapPin, RotateCcw } from 'lucide-react';
 import { locations } from './catalog.js';
 
+import {SiteCards} from './Offers.jsx';
+import {sites,sitePath} from './offer.js';
+
 export const firstStageCities = [
   {id: 'MBL', lat: 50.412, lng: 14.904},
   {id: 'KLD', lat: 50.148, lng: 14.106},
@@ -37,6 +40,7 @@ export default function AreaMap() {
         </div>
         {city && <div className="atlas-actions">
           <a className="garden-button city-config" href={'/?lokalita=' + city.id + '#konfigurator'}>Vybrat v konfigurátoru <ArrowUpRight size={16}/></a>
+          <a className="atlas-directions" href={sitePath(sites.find(site=>site.id===city.id))}>Detail lokality <ArrowUpRight size={13}/></a>
           <a className="atlas-directions" href={'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(city.name + ', Česko')} target="_blank" rel="noreferrer">Trasa do města <ArrowUpRight size={13}/></a>
         </div>}
       </div>
@@ -55,5 +59,6 @@ export default function AreaMap() {
         <figcaption className="atlas-caption"><LocateFixed size={15}/><span aria-live="polite">{city ? city.name + ' · ' : ''}Mapa zobrazuje orientační polohu měst.</span></figcaption>
       </figure>
     </div>
+    <SiteCards/>
   </section>;
 }

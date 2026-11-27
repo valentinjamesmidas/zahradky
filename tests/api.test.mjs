@@ -1,10 +1,10 @@
 import {test,after,before} from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
+import {readFile,readdir} from 'node:fs/promises';
 import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
 import {defaultConfig,calculate} from '../src/catalog.js';
 let mf,db;
-before(async()=>{mf=new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:'dist/_worker.js',compatibilityDate:'2026-11-01',d1Databases:['DB']}));db=await mf.getD1Database('DB');const sql=await readFile('migrations/0001_leads.sql','utf8');for(const statement of sql.split(';').map(s=>s.trim()).filter(Boolean))await db.prepare(statement).run()});
+before(async()=>{mf=new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:'dist/_worker.js',compatibilityDate:'2026-11-01',d1Databases:['DB']}));db=await mf.getD1Database('DB');const sql=(await Promise.all((await readdir('migrations')).filter(name=>name.endsWith('.sql')).sort().map(name=>readFile('migrations/'+name,'utf8')))).join('\n');for(const statement of sql.split(';').map(s=>s.trim()).filter(Boolean))await db.prepare(statement).run()});
 after(async()=>{await mf?.dispose()});
 const payload=(override={})=>({name:'Testovací zájemce',email:'test@example.com',phone:'+420 777 123 456',note:'Automatický lokální test.',consent:true,reserve:true,requestId:crypto.randomUUID(),config:{...defaultConfig},...override});
 const send=(body,extra={})=>mf.dispatchFetch('https://zahradka.test/api/leads',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://zahradka.test','CF-Connecting-IP':'192.0.2.10',...extra},body:JSON.stringify(body)});
@@ -16,3 +16,15 @@ test('NOVA choice survives API persistence with its server-calculated price',asy
 
 test('Unpriced concept and equipment choices persist without adding invented prices',async()=>{const config={...defaultConfig,house:'studio',extra_sauna:true};const body=payload({config});const r=await send(body,{'CF-Connecting-IP':'192.0.2.46'});assert.equal(r.status,201);const row=await db.prepare('SELECT configuration,total FROM leads WHERE request_id=?').bind(body.requestId).first();assert.equal(JSON.parse(row.configuration).extra_sauna,true);assert.equal(row.total,calculate(config).total);assert.equal(calculate(config).unpriced.length,2)});
 test('API refuses colliding equipment configurations',async()=>{const r=await send(payload({config:{...defaultConfig,extra_sauna:true,extra_pool:true}}));assert.equal(r.status,400)});
+
+test('Visit signup is assigned, retryable and distinct from a quote',async()=>{
+ const body={requestId:crypto.randomUUID(),intent:'visit',location:'MBL',email:'visit@example.test',consent:true};
+ const headers={'CF-Connecting-IP':'192.0.2.57'};
+ assert.equal((await send({...body,location:'MOS'},headers)).status,400);
+ const responses=await Promise.all([send(body,headers),send(body,headers)]);
+ const codes=await Promise.all(responses.map(async r=>(await r.json()).code));
+ assert.equal(codes[0],codes[1]);assert.match(codes[0],/^PR-MBL-/);
+ const row=await db.prepare('SELECT * FROM sales_inbox WHERE code=?').bind(codes[0]).first();
+ assert.equal(row.email,body.email);assert.equal(row.assigned_to,'zahradky@albetservis.cz');
+ assert.equal(row.configuration,null);assert.equal(row.first_response_at,null);
+});

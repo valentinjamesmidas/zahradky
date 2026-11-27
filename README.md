@@ -115,3 +115,14 @@ Hlavní stránka je na `/`; konfigurátor na `/#konfigurator`. Původní odkazy 
 Mapa první etapy je vlastní vektorová ilustrace s orientační polohou měst. Hranice krajů a průběh Vltavy a Labe vycházejí z veřejně dostupných [dat Natural Earth 1 : 10 000 000](https://www.naturalearthdata.com/). Kliknutím na značku nebo město v seznamu se mapa přiblíží a nabídne přechod do konfigurátoru. Google Mapy otevře až samostatný odkaz pro vyhledání trasy.
 
 Šest původních vizualizací v `public/images/galerie` ukazuje ilustrativní scénáře s modelem NOVA 4 × 3 m. Model vychází z katalogu [TŘY D](https://tryd.cz/hybridni-dum-nova/), který jako prodávajícího uvádí [DOMY Dřevostavby Development s.r.o.](https://tryd.cz/obchodni-podminky/). Čtyři cortenové záhony, pergola s ohništěm a modřínová terasa jsou volby místního konfigurátoru. Podněty pro výběr scén přinesly [případová studie osady Klecánky](https://dspace.cuni.cz/handle/20.500.11956/46873) (sousedství, společná pěšina), [šetření v českobudějovických osadách](https://dspace.jcu.cz/items/4613ffc7-022c-49ff-a63d-d4a3542faf67) (pěstování a odpočinek) a [reportáž Radiožurnálu z kolonie Jiřina](https://radiozurnal.rozhlas.cz/cerpaji-energii-v-malych-zelenych-svetech-ucime-se-za-pochodu-rikaji-zahradkari-7202677) (domek se záhony a místem k posezení na jedné zahrádce).
+
+### Vyřizování poptávek a prohlídek
+
+Záznamy se přiřazují Petrovi Voborníkovi (zahradky@albetservis.cz). Prodejce s přístupem do projektové D1 může otevřít pohled `sales_inbox` v konzoli Cloudflare nebo použít přihlášený Wrangler.
+
+- `npm run obchod -- inbox` vypíše žádosti čekající na první osobní odpověď.
+- `npm run obchod -- inbox PRI` vypíše zájemce o první termín pro Příbram. Pro další města použijte KLD nebo MBL. Jakmile bude termín potvrzený, kontaktujte zájemce jednotlivě z projektové schránky.
+- Po skutečné první odpovědi zadejte `npm run obchod -- replied KÓD`. Opakované spuštění zachová první čas. Sloupec `response_seconds` udává počet sekund od přijetí.
+- Web na pages.dev přijímá žádosti do D1 a poskytuje kopii ke stažení. Automatické e-maily neodesílá. Odkaz „Napsat Petrovi“ otevírá poštovní aplikaci návštěvníka.
+
+Před vydáním aplikujte migrace D1 v pořadí. Migrace 0002 doplní přiřazení rovněž k původním poptávkám. Datum prvního kontaktu u nich není zpětně známo. Úklid starších záznamů běží při přijetí nových požadavků.

@@ -3,6 +3,8 @@ import { ChevronDown, ChevronLeft, ChevronRight, Expand, House, MapPin, X } from
 import { houses } from './catalog.js';
 import AreaMap, { firstStageCities } from './AreaMap.jsx';
 
+import { Contact } from './Offers.jsx';
+
 const nova = houses.find(house => house.id === 'nova');
 const reasons = [
   ['Vyberete si oblast', 'Porovnejte na mapě Mladou Boleslav, Kladno a Příbram podle toho, odkud budete na zahrádku jezdit.'],
@@ -44,7 +46,7 @@ function Gallery() {
     <div className="section-heading"><span className="section-kicker">Galerie vizualizací</span><h2 id="gallery-title">Ze života zahrádky</h2></div>
     <div className="garden-gallery">{scenes.map((scene, i) => <figure key={scene.id}>
       <button className="photo-frame" aria-label={'Zvětšit snímek – ' + scene.title} aria-haspopup="dialog" onClick={() => { setIndex(i); setOpen(true); }}>
-        <Photo scene={scene}/><span className="expand-icon"><Expand size={16}/></span>
+        <Photo scene={scene}/><span className="photo-label">Vizualizace</span><span className="expand-icon"><Expand size={16}/></span>
       </button>
       <figcaption><h3>{scene.title}</h3><p>{scene.caption}</p></figcaption>
     </figure>)}</div>
@@ -97,10 +99,10 @@ function Welcome() {
     <Photo scene={heroScenes[active]} hero/>
     <div className="hero-inner">
       <span className="hero-kicker">Soukromé sady · 300 m²</span>
-      <h1 id="welcome-title">Vlastní zahrádka<br/><em>ve středních Čechách.</em></h1>
-      <p>Vyberte si místo pro svůj sad. Domek, terasu i záhony si rozvrhnete ve 3D podle sebe.</p>
+      <h1 id="welcome-title">Zahrádkářské kolonie <em>Střední Čechy</em></h1>
+      <p>Prohlédněte si lokality první etapy a navrhněte si zahrádku podle sebe.</p>
       <DesignPicker/>
-      <a className="hero-more" href="/#prvni-duvod">Zjistit víc o zahrádkách</a>
+      <a className="hero-more" href="/#prvni-duvod">Zjisti víc</a>
     </div>
     <div className="scene-strip">
       <span aria-live="polite">Vizualizace · {heroScenes[active].title}</span>
@@ -113,18 +115,18 @@ function Welcome() {
 export default function Landing() {
   return <main className="landing">
     <Welcome/>
-    <section className="benefits content-section" id="prvni-duvod" aria-labelledby="benefits-title">
+    <section className="benefits content-section" aria-labelledby="benefits-title">
       <div className="benefit-intro"><span className="section-kicker">O zahrádkách</span>
         <h2 id="benefits-title">Od první volby<br/>k vlastnímu sadu.</h2>
         <a className="section-link" href="/#lokality">Prohlédnout lokality</a>
       </div>
-      <ol>{reasons.map(([title, detail]) => <li key={title}><h3>{title}</h3><p>{detail}</p></li>)}</ol>
+      <ol>{reasons.map(([title, detail], i) => <li key={title} id={i===0 ? "prvni-duvod" : undefined}><h3>{title}</h3><p>{detail}</p></li>)}</ol>
     </section>
     <AreaMap/><Gallery/>
     <section id="o-nas" className="about-section content-section"><div className="about-photo"><Photo scene={scenes[5]}/></div><div><span className="section-kicker">O nás</span><h2>Zahrádky mezi sady</h2>
       <p>CHCI ZAHRÁDKU.cz představuje koncept soukromých sadů o rozloze 300 m². V konfigurátoru si sestavíte návrh a předáte ho k ověření dostupnosti a podmínek pro konkrétní parcelu.</p>
       <p>Podkladem pro model NOVA je zahradní domek značky TŘY D společnosti DOMY Dřevostavby Development s.r.o. Galerie ukazuje, jak může domek v zahradě vypadat.</p>
-      <a href={nova.source} target="_blank" rel="noreferrer">Domek NOVA u výrobce</a>
+      <Contact/><a href={nova.source} target="_blank" rel="noreferrer">Domek NOVA u výrobce</a>
     </div></section>
   </main>;
 }
