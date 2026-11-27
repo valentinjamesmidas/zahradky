@@ -54,7 +54,7 @@ function Header({ section, isConfig, detail }) {
           aria-current={(isConfig ? id === 'konfigurator' : id === section) ? 'location' : undefined}
           onClick={() => setOpen(false)}>{title}</a>)}
       </nav>
-      <a className="garden-button nav-cta" href="/#konfigurator" onClick={() => setOpen(false)}>Navrhnout si zahrádku</a>
+      <a className="garden-button nav-cta" href="/#konfigurator" onClick={() => setOpen(false)}>Navrhnout zahrádku</a>
       <button ref={toggle} className="menu-toggle" aria-label={open ? 'Zavřít menu' : 'Otevřít menu'}
         aria-controls="hlavni-menu" aria-expanded={open} onClick={() => setOpen(!open)}>
         {open ? <X/> : <Menu/>}
